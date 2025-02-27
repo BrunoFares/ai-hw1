@@ -31,6 +31,85 @@ class PuzzleSolver:
                 self.states.pop(state)
                 continue
 
+    # Build graph
+    def buildGraph(self):
+        if (self.characters == 2):
+            self.buildGraph2Chars()
+        elif (self.characters == 3):
+            self.buildGraph3Chars()
+    
+    # Build graph with 2 characters
+    def buildGraph2Chars(self):
+        for state in self.states:
+            for otherState in self.states:
+                if (state == otherState):
+                    continue
+
+                if (state[0] == otherState[0]):
+                    continue
+
+                if (state[1] != otherState[1]):
+                    if (state[2] != otherState[2]):
+                        continue
+                    elif (state[3] != otherState[3]):
+                        continue
+                            
+                if (state[2] != otherState[2]):
+                    if (state[3] != otherState[3]):
+                        continue
+                    else:
+                        self.states[state].append(otherState)
+                        continue
+
+                self.states[state].append(otherState)
+
+    # Build graph with 3 characters
+    def buildGraph3Chars(self):
+        for state in self.states:
+            for otherState in self.states:
+                if (state == otherState):
+                    continue
+
+                if (state[0] == otherState[0]):
+                    continue
+
+                if (state[1] != otherState[1]):
+                    if (state[1] != state[0]):
+                        continue
+
+                    if (state[2] != otherState[2]):
+                        if (state[2] != state[0]):
+                            continue
+
+                        if (state[3] != otherState[3]):
+                            continue
+                        else:
+                            self.states[state].append(otherState)
+                            continue
+                    else:
+                        self.states[state].append(otherState)
+                        continue
+                
+                if (state[2] != otherState[2]):
+                    if (state[2] != state[0]):
+                        continue
+
+                    if (state[3] != otherState[3]):
+                        if (state[3] != state[0]):
+                            continue
+
+                        self.states[state].append(otherState)
+                        continue
+                
+                if (state[3] != otherState[3]):
+                    if (state[3] != state[0]):
+                        continue
+
+                    self.states[state].append(otherState)
+                    continue
+
+                self.states[state].append(otherState)
+
     # Main Solve function
     def solve(self):
         if (self.algorithm == "BFS"):
@@ -98,7 +177,8 @@ class PuzzleSolver:
     def printSolution(self):
         pass
 
-puzzleSolver = PuzzleSolver(2, "BFS")
+puzzleSolver = PuzzleSolver(3, "BFS")
 puzzleSolver.setStates()
 puzzleSolver.eliminateIllegalStates()
+puzzleSolver.buildGraph()
 print(puzzleSolver.states)
