@@ -21,6 +21,16 @@ class PuzzleSolver:
                     state += "N"
             self.states[state] = []
 
+    # Eliminate illegal states
+    def eliminateIllegalStates(self):
+        for state in list(self.states.keys()):
+            if (state[0] != state[1]) and (state[0] != state[2]):
+                self.states.pop(state)
+                continue
+            if (state[0] != state[2]) and (state[0] != state[3]):
+                self.states.pop(state)
+                continue
+
     # Main Solve function
     def solve(self):
         if (self.algorithm == "BFS"):
@@ -87,3 +97,8 @@ class PuzzleSolver:
     # Print solution
     def printSolution(self):
         pass
+
+puzzleSolver = PuzzleSolver(2, "BFS")
+puzzleSolver.setStates()
+puzzleSolver.eliminateIllegalStates()
+print(puzzleSolver.states)
