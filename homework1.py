@@ -1,6 +1,18 @@
 class PuzzleSolver:
     characters = 0
     algorithm = ""
+    states = {
+        'NNNN': ['FNFN', 'FNFF', 'FFNF', 'FFFN'], 
+        'NNNF': ['FNFF', 'FFNF', 'FFFF'], 
+        'NNFN': ['FNFN', 'FNFF', 'FFFN', 'FFFF'], 
+        'NFNN': ['FFNF', 'FFFN', 'FFFF'], 
+        'NFNF': ['FFNF', 'FFFF'], 
+        'FNFN': ['FFNF', 'NNFN'], 
+        'FNFF': ['NNNN', 'NNNF', 'NNFN'], 
+        'FFNN': ['NNNN', 'NNNF', 'NFNN', 'NFNF'], 
+        'FFFN': ['NNNN', 'NNFN', 'NFNN'], 
+        'FFFF': ['NNNF', 'NNFN', 'NFNN', 'NFNF']
+    }
 
     # Constructor
     def __init__(self, characters, algorithm):
