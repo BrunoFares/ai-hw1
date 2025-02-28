@@ -2,6 +2,7 @@ class PuzzleSolver:
     characters = 0
     algorithm = ""
     states = {}
+    answer = []
 
     # Constructor
     def __init__(self, characters, algorithm):
@@ -126,8 +127,24 @@ class PuzzleSolver:
             self.solveIDDFS()
 
     # BFS
-    def solveBFS(self):
-        pass
+    def solveBFS(self, start="NNNN"):
+        visited = set()
+        queue = [(start, [start])]
+        visited.add(start)
+
+        while queue:
+            node, path = queue.pop(0)
+
+            if node == "FFFF":
+                self.answer = path
+                return
+
+            for neighbor in self.states.get(node, []):
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append((neighbor, path + [neighbor]))
+
+        self.answer = []
 
     # DFS
     def solveDFS(self):
@@ -143,8 +160,19 @@ class PuzzleSolver:
 
     # Print solution
     def printSolution(self):
-        pass
+        if self.answer == []:
+            print("No solution found, use the solve() function to find a solution.")
+            return
+        
+        print()
+        for i in range(len(self.answer)):
+            print(self.answer[i], end="")
 
-puzzleSolver = PuzzleSolver(3, "BFS")
+            if (i != len(self.answer) - 1):
+                print(" -> ", end="")
+            else:
+                print('\n')
+
+puzzleSolver = PuzzleSolver(2, "BFS")
 puzzleSolver.solve()
-print(puzzleSolver.states)
+puzzleSolver.printSolution()
