@@ -1,6 +1,8 @@
 class PuzzleSolver:
     characters = 0
     algorithm = ""
+    initialState = 'NNNN'
+    finalState = 'FFFF'
     states = {}
     answer = []
 
@@ -11,8 +13,6 @@ class PuzzleSolver:
 
     # Set states
     def setStates(self):
-        initialState = "NNNN"
-
         for i in range(16):
             state = ""
             for j in range(4):
@@ -112,7 +112,7 @@ class PuzzleSolver:
                 self.states[state].append(otherState)
 
     # Main Solve function
-    def solve(self):
+    def solve(self, limit=8):
         self.setStates()
         self.eliminateIllegalStates()
         self.buildGraph()
@@ -122,20 +122,20 @@ class PuzzleSolver:
         elif (self.algorithm == "DFS"):
             self.solveDFS()
         elif (self.algorithm == "DLS"):
-            self.solveDLS()
+            self.solveDLS(limit)
         elif (self.algorithm == "IDDFS"):
             self.solveIDDFS()
 
     # BFS
     def solveBFS(self):
         visited = set()
-        queue = [("NNNN", ["NNNN"])]
-        visited.add("NNNN")
+        queue = [(self.initialState, [self.initialState])]
+        visited.add(self.initialState)
 
         while queue:
             node, path = queue.pop(0)
 
-            if node == "FFFF":
+            if node == self.finalState:
                 self.answer = path
                 return
 
@@ -149,12 +149,12 @@ class PuzzleSolver:
     # DFS
     def solveDFS(self):
         visited = set()
-        stack = [("NNNN", ["NNNN"])]
+        stack = [(self.initialState, [self.initialState])]
 
         while stack:
             node, path = stack.pop()
 
-            if node == "FFFF":
+            if node == self.finalState:
                 self.answer = path
                 return
 
@@ -166,15 +166,19 @@ class PuzzleSolver:
                         stack.append((neighbor, path + [neighbor]))
 
     # DLS
-    def solveDLS(self):
-        pass
+    def solveDLS(self, limit):
+        result = self.depthLimitedSearch(self.initialState, limit)
+        if result:
+            self.answer = result
+        else:
+            self.answer = []
 
     # IDDFS
     def solveIDDFS(self):
         depth = 0
 
         while (True):
-            result = self.depthLimitedSearch("NNNN", depth)
+            result = self.depthLimitedSearch(self.initialState, depth)
             depth += 1
 
             if (result != []):
@@ -182,13 +186,13 @@ class PuzzleSolver:
                 return
 
     def depthLimitedSearch(self, problem, l):
-        frontier = [('NNNN', ['NNNN'], 0)]
+        frontier = [(problem, [problem], 0)]
         result = []
 
         while (frontier):
             node, path, depth = frontier.pop(0)
 
-            if (node == "FFFF"):
+            if (node == self.finalState):
                 return path
 
             if (depth < l):
@@ -203,7 +207,7 @@ class PuzzleSolver:
             print("No solution found, use the solve() function to find a solution.")
             return
         
-        print()
+        print(f"\nSolution path from %s to %s:" % (self.initialState, self.finalState))
         for i in range(len(self.answer)):
             print(self.answer[i], end="")
 
@@ -212,6 +216,6 @@ class PuzzleSolver:
             else:
                 print('\n')
 
-puzzleSolver = PuzzleSolver(2, "DFS")
+puzzleSolver = PuzzleSolver(2, "IDDFS")
 puzzleSolver.solve()
 puzzleSolver.printSolution()
