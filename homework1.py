@@ -127,10 +127,10 @@ class PuzzleSolver:
             self.solveIDDFS()
 
     # BFS
-    def solveBFS(self, start="NNNN"):
+    def solveBFS(self):
         visited = set()
-        queue = [(start, [start])]
-        visited.add(start)
+        queue = [("NNNN", ["NNNN"])]
+        visited.add("NNNN")
 
         while queue:
             node, path = queue.pop(0)
@@ -156,7 +156,31 @@ class PuzzleSolver:
 
     # IDDFS
     def solveIDDFS(self):
-        pass
+        depth = 0
+
+        while (True):
+            result = self.depthLimitedSearch("NNNN", depth)
+            depth += 1
+
+            if (result != []):
+                self.answer = result
+                return
+
+    def depthLimitedSearch(self, problem, l):
+        frontier = [('NNNN', ['NNNN'], 0)]
+        result = []
+
+        while (frontier):
+            node, path, depth = frontier.pop(0)
+
+            if (node == "FFFF"):
+                return path
+
+            if (depth < l):
+                for neighbor in self.states.get(node, []):
+                    frontier.append((neighbor, path + [neighbor], depth + 1))
+
+        return result
 
     # Print solution
     def printSolution(self):
