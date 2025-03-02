@@ -148,7 +148,22 @@ class PuzzleSolver:
 
     # DFS
     def solveDFS(self):
-        pass
+        visited = set()
+        stack = [("NNNN", ["NNNN"])]
+
+        while stack:
+            node, path = stack.pop()
+
+            if node == "FFFF":
+                self.answer = path
+                return
+
+            if node not in visited:
+                visited.add(node)
+
+                for neighbor in reversed(self.states.get(node, [])):
+                    if neighbor not in visited:
+                        stack.append((neighbor, path + [neighbor]))
 
     # DLS
     def solveDLS(self):
@@ -197,6 +212,6 @@ class PuzzleSolver:
             else:
                 print('\n')
 
-puzzleSolver = PuzzleSolver(2, "BFS")
+puzzleSolver = PuzzleSolver(2, "DFS")
 puzzleSolver.solve()
 puzzleSolver.printSolution()
