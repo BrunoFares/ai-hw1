@@ -1,3 +1,5 @@
+# River crossing puzzle solution
+
 This was my submission for the first homework of my Artificial Intelligence course at university. 
 
 The goal was to solve the river crossing puzzle with a robot, a fox, a chicken and chicken-feed.
